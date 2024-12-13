@@ -2,6 +2,8 @@ local SaveData = {};
 SaveData.__index = SaveData;
 
 function SaveData.new(name)
+    assert(type(name) == "string", "must have name to creat saveData");
+
     local instance = setmetatable({}, SaveData);
 
     instance.name = name;
@@ -14,11 +16,11 @@ function SaveData:setData(name, setTo)
     self.data[name] = setTo;
 end
 
-function SaveData:load(prim)
+function SaveData:load(_prim_)
     local file = love.filesystem.load(self.name .. ".lua");
 
-    if prim then
-        return file()[prim];
+    if _prim_ then
+        return file()[_prim_];
     end
 
     return file();
@@ -34,12 +36,12 @@ function SaveData:save()
     end
 
     file:write("return {\r\n");
-    file:write(self:getDataAsString(self.data));
+    file:write(self.getDataAsString(self.data));
     file:write("};");
     file:close();
 end
 
-function SaveData:getDataAsString(data)
+function SaveData.getDataAsString(data)
     local str = "";
 
     for k, v in pairs(data) do
@@ -54,7 +56,7 @@ function SaveData:getDataAsString(data)
         elseif type(v) == "nil" then
             val = "nil";
         elseif type(v) == "table" then
-            val = string.gsub("{\r\n" .. self:getDataAsString(v) .. "}", "\r\n", "\r\n\t");
+            val = string.gsub("{\r\n" .. self.getDataAsString(v) .. "}", "\r\n", "\r\n\t");
         end
 
         if val then
