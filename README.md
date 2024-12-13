@@ -3,6 +3,7 @@ saving and loading for love2d
 
 ## Basic Usage
 download and place saveData.lua into your project and add ```SaveData = require("saveData");``` into your main file
+liscense is in file
 
 create and use save data like so:
 ```lua
